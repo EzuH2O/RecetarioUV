@@ -1,0 +1,12 @@
+.container.cat_wrap
+	%h2 Este es el perfil de:
+	%h1= @user.name	
+- @user.recipes.each_slice(4) do |recipes|
+	.row
+		- recipes.each do |recipe|
+			.col-md-3
+				.recipe
+					.image_wrapper
+						= link_to recipe do
+							= image_tag recipe.image.url(:medium)
+					%h2= link_to recipe.title, recipe

@@ -1,0 +1,43 @@
+.main_content
+	#recipe_top.row
+		.col-md-4
+			= image_tag @recipe.image.url(:medium), class: "recipe_image"
+		.col-md-8
+			#recipe_info
+				%h1= @recipe.title
+				%p.description= @recipe.description
+				%p
+				Escrita por:
+				= @recipe.user.name
+				= link_to like_recipe_path(@recipe), method: :put, class: "btn btn-default" do
+					%span.glyphicon.glyphicon-heart
+						= @recipe.get_upvotes.size
+				.tab-green= raw @recipe.tag_list.map { |t| link_to t, tag_path(t) }.join(', ')
+				
+
+	.row
+		.col-md-6
+			#ingredients
+				%h2 Ingredientes
+				%ul
+					- @recipe.ingredients.each do |ingredient|
+						%li= ingredient.name
+
+		.col-md-6
+			#directions
+				%h2 Pasos
+				%ul
+					- @recipe.directions.each do |direction|
+						%li= direction.step
+		.col-sm-6
+			#recipe_info
+				%iframe{ :width => "100%", :height => "300", :src => "#{@recipe.youtube}", :frameborder => "0", :allowfullscreen => true}
+	.row
+		.col-md-12
+			= link_to "Back", root_path, class: "btn btn-default"
+			= link_to like_recipe_path(@recipe), method: :put, class: "btn btn-default" do
+				%span.glyphicon.glyphicon-heart
+					= @recipe.get_upvotes.size
+			- if (user_signed_in?) && (current_user == @recipe.user)
+				= link_to "Edit", edit_recipe_path, class: "btn btn-default"
+				= link_to "Delete", recipe_path, method: :delete, data: {confirm: "Are you sure?" }, class: "btn btn-default"
